@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Ganhos Pro | Controle Financeiro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient-start: #0a0f1e;
+            --bg-gradient-end: #03060c;
+            --glass-bg: rgba(12, 20, 35, 0.7);
+            --header-bg: linear-gradient(145deg, #1e293bdd, #0f172add);
+            --accent-color: #facc15;
+            --card-bg: linear-gradient(145deg, #1a2538, #0f172a);
+            --text-primary: #eef5ff;
+            --text-secondary: #94a3b8;
+            --success-color: #2ecc71;
+            --current-week-bg: linear-gradient(135deg, #0a2a4a, #0645a0);
+            --past-week-bg: linear-gradient(135deg, #0b3d1f, #064e1f);
+            --font-family: system-ui, -apple-system, 'Inter', sans-serif;
+            --border-radius: 1rem;
+            --card-radius: 0.75rem;
+            --accent-color-rgb: 250, 204, 21;
+            --success-color-rgb: 46, 204, 113;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, var(--bg-gradient-start), var(--bg-gradient-end));
+            font-family: var(--font-family);
+            padding: 1rem;
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .glass-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem);
+            overflow: hidden;
+        }
+
+        .top-header-bar {
+            background: linear-gradient(135deg, #1a1f2e, #0f1420);
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.3);
+            flex-shrink: 0;
+        }
+
+        .top-header-bar.hidden-header {
+            display: none;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .coin-icon {
+            background: linear-gradient(145deg, #facc15, #eab308);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #0a0f1e;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Ícone de Configurações - Corrigido para não travar */
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 44px;
+            height: 44px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #a0aec0;
+            font-size: 1.2rem;
+        }
+
+        .settings-btn:hover {
+            background: rgba(100, 108, 255, 0.2);
+            border-color: rgba(100, 108, 255, 0.4);
+            color: #a0a0ff;
+            transform: scale(1.05);
+        }
+
+        .settings-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Remove qualquer estado fixo */
+        .settings-btn:focus {
+            outline: none;
+        }
+
+        .fixed-header {
+            flex-shrink: 0;
+            padding: 0.9rem 1.2rem 0.7rem;
+            background: rgba(12, 20, 35, 0.92);
+            border-bottom: 1px solid rgba(250, 204, 21, 0.2);
+        }
+
+        .unified-header {
+            background: var(--header-bg);
+            border-radius: 0.75rem;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid rgba(var(--accent-color-rgb), 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .month-header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            width: 100%;
+        }
+
+        .nav-arrow {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--accent-color);
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+        }
+
+        .nav-arrow:active {
+            transform: scale(0.9);
+        }
+
+        .month-year-container {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.8rem;
+            border-radius: 0.5rem;
+        }
+
+        .month-year-clickable {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        .month-name, .year-number {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-transform: uppercase;
+        }
+
+        .balance-section {
+            text-align: center;
+            width: 100%;
+            padding-top: 0.3rem;
+        }
+
+        .balance-label {
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #FFFFFF;
+        }
+
+        .balance-value {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .balance-positive { color: var(--success-color); }
+        .balance-zero { color: #FFFFFF; }
+
+        .scrollable-weeks {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.8rem 1.2rem 1.2rem;
+        }
+
+        .week-accordion {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .week-header-accordion {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .week-header-accordion.week-past-with-values {
+            background: var(--past-week-bg);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .week-header-accordion.week-current {
+            background: var(--current-week-bg);
+            border-left: 4px solid #3b82f6;
+        }
+
+        .week-header-accordion.week-default {
+            background: linear-gradient(135deg, #1e2a3a, #0f172a);
+            border-left: 4px solid transparent;
+        }
+
+        .week-header-accordion:hover {
+            transform: scale(1.01);
+        }
+
+        .week-title-line {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #FFFFFF;
+            text-transform: uppercase;
+        }
+        
+        .week-text { font-size: 0.9rem; color: #FFFFFF; text-transform: uppercase; }
+        .week-num { background: rgba(255, 255, 255, 0.2); padding: 2px 8px; border-radius: 0.375rem; font-size: 0.8rem; font-weight: 700; color: #FFFFFF; }
+        .week-range-compact { font-size: 0.65rem; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 0.375rem; color: #a0b3d9; margin-top: 4px; white-space: nowrap; }
+
+        .week-total-badge {
+            background: rgba(0, 0, 0, 0.55);
+            padding: 5px 12px;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .week-total-positive { color: var(--success-color); }
+        .week-total-zero { color: var(--text-secondary); }
+
+        .weekly-view-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.8rem 1.2rem 1.2rem;
+        }
+
+        .weekly-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.3);
+        }
+
+        .back-button {
+            background: rgba(var(--accent-color-rgb), 0.15);
+            border: 1px solid rgba(var(--accent-color-rgb), 0.3);
+            width: 44px;
+            height: 44px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            background: rgba(var(--accent-color-rgb), 0.3);
+        }
+
+        .weekly-header-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-transform: uppercase;
+        }
+
+        .weekly-header-title p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .day-card-3d {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            margin-bottom: 0.4rem;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .day-card-3d:hover {
+            transform: translateY(-2px);
+            border-color: rgba(var(--accent-color-rgb), 0.3);
+        }
+
+        .day-card-3d.day-has-value {
+            background: linear-gradient(145deg, #0a3a1e, #064e1f);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .day-card-3d.day-falta { background: linear-gradient(145deg, #5a1a1a, #8b0000); border-left: 4px solid #e74c3c; }
+        .day-card-3d.day-doente { background: linear-gradient(145deg, #5a3a1a, #8b5a00); border-left: 4px solid #f39c12; }
+        .day-card-3d.day-feriado { background: linear-gradient(145deg, #2a4a1a, #2e6b1f); border-left: 4px solid var(--accent-color); }
+        .day-card-3d.day-sem-servico { background: linear-gradient(145deg, #4a4a1a, #6b6b1f); border-left: 4px solid #95a5a6; }
+        .day-card-3d.day-falta-justificada { background: linear-gradient(145deg, #4a3a1a, #6b5a1f); border-left: 4px solid #f39c12; }
+        .day-card-3d.day-default { background: var(--card-bg); }
+
+        .day-name-3d {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #FFFFFF;
+            text-transform: uppercase;
+        }
+
+        .day-date-3d {
+            font-size: 0.7rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3px 10px;
+            border-radius: 0.375rem;
+            color: #a0b3d9;
+        }
+
+        .absence-badge-3d {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 0.375rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .absence-badge-3d.falta-badge { background: rgba(231, 76, 60, 0.25); color: #ff8a7a; border: 1px solid rgba(231, 76, 60, 0.5); }
+        .absence-badge-3d.doente-badge { background: rgba(243, 156, 18, 0.25); color: #f5b84a; border: 1px solid rgba(243, 156, 18, 0.5); }
+        .absence-badge-3d.feriado-badge { background: rgba(var(--accent-color-rgb), 0.25); color: var(--accent-color); }
+        .absence-badge-3d.sem-servico-badge { background: rgba(149, 165, 166, 0.25); color: #bdc3c7; }
+
+        .day-value-3d {
+            font-weight: 900;
+            font-size: 1.15rem;
+            white-space: nowrap;
+        }
+
+        .day-value-positive-3d { color: var(--success-color); }
+        .day-value-zero-3d { color: var(--text-secondary); }
+
+        .week-total-container {
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: linear-gradient(145deg, #1a2a3a, #0f1a2a);
+            border-radius: var(--card-radius);
+            border: 1px solid rgba(var(--success-color-rgb), 0.3);
+            text-align: center;
+        }
+
+        .week-total-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+        }
+
+        .week-total-amount {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--success-color);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+        
+        .edit-panel {
+            background: linear-gradient(145deg, #0f172a, #0a0f1a);
+            width: 90%;
+            max-width: 480px;
+            border-radius: 1rem;
+            border: 1px solid rgba(var(--accent-color-rgb), 0.25);
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .edit-panel { transform: scale(1); }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #1e2a3a, #0f172a);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.3);
+        }
+        
+        .modal-header-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, var(--accent-color), #eab308);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .modal-header-icon i { font-size: 2rem; color: #0a0f1e; }
+        
+        .modal-header-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+        
+        .dots-menu-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 0.5rem;
+            color: var(--accent-color);
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 2600;
+        }
+        
+        .absence-menu {
+            position: absolute;
+            top: 4.5rem;
+            right: 1rem;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(var(--accent-color-rgb), 0.3);
+            z-index: 2500;
+            min-width: 210px;
+            transform: scale(0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .absence-menu.active { transform: scale(1); opacity: 1; visibility: visible; }
+        
+        .menu-item {
+            padding: 0.75rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+        }
+        
+        .menu-item:hover { background: rgba(var(--accent-color-rgb), 0.15); }
+        .menu-item.remover-item { border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 0.3rem; }
+        
+        .modal-body { padding: 1.5rem; }
+        
+        .value-field {
+            margin-bottom: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 0.75rem;
+            padding: 0.2rem 0.2rem 0.2rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .value-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .currency-symbol {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+        
+        .value-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.9rem 0;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            outline: none;
+        }
+        
+        .desc-field {
+            margin-bottom: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 0.75rem;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .desc-textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 0.5rem 0;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            resize: vertical;
+            min-height: 70px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .btn-cancel-modal {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.75rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .btn-save-modal {
+            background: linear-gradient(135deg, var(--accent-color), #eab308);
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 0.75rem;
+            color: #0a0f1e;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+
+        .settings-modal {
+            background: linear-gradient(145deg, #0f172a, #0a0f1e);
+            border-radius: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(var(--accent-color-rgb), 0.3);
+            overflow: hidden;
+        }
+
+        .settings-header {
+            background: linear-gradient(135deg, #1e2a3a, #0f172a);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.2);
+        }
+
+        .settings-header h3 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .settings-body { padding: 1.5rem; }
+
+        .info-card {
+            background: rgba(30, 40, 60, 0.4);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .developer-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.3rem;
+        }
+
+        .developer-title {
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        .support-email {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 0.5rem;
+            word-break: break-all;
+        }
+
+        .support-email i { color: var(--accent-color); margin-right: 8px; }
+
+        .version-info {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-settings {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: rgba(var(--accent-color-rgb), 0.15);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+            color: #FFFFFF;
+            transition: all 0.2s;
+        }
+
+        .close-settings:hover { background: rgba(var(--accent-color-rgb), 0.25); transform: scale(1.02); }
+
+        .calendar-modal { background: #0a0f1e; border-radius: 1rem; max-width: 550px; width: 90%; padding: 1.2rem; max-height: 80vh; overflow: auto; border: 1px solid rgba(var(--accent-color-rgb), 0.4); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+        .cal-weekday { font-size: 0.7rem; font-weight: 600; color: #FFFFFF; padding: 8px 4px; text-transform: uppercase; }
+        .cal-day { background: rgba(30, 40, 60, 0.6); border-radius: 0.5rem; padding: 8px 4px; font-size: 0.8rem; cursor: pointer; color: #FFFFFF; transition: all 0.2s; }
+        .cal-day:hover { transform: scale(1.05); background: rgba(var(--accent-color-rgb), 0.2); }
+        .cal-day.has-value { background: rgba(46, 204, 113, 0.2); border: 1px solid rgba(46, 204, 113, 0.4); color: #2ecc71; }
+        .close-modal-btn { background: var(--accent-color); border: none; padding: 10px 24px; border-radius: 0.75rem; margin-top: 1rem; cursor: pointer; font-weight: bold; color: #0a0f1e; }
+        .decision-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .btn-decision { padding: 10px 20px; border-radius: 0.75rem; font-weight: bold; border: none; cursor: pointer; }
+        .btn-keep { background: #2b9348; color: white; }
+        .btn-transfer { background: #e85d04; color: white; }
+
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #facc15;
+            padding: 12px 24px;
+            border-radius: 0.75rem;
+            font-size: 0.85rem;
+            z-index: 6000;
+            border-left: 3px solid #facc15;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 680px) {
+            .balance-value { font-size: 1.5rem; }
+            .logo-text { font-size: 1.2rem; }
+            .coin-icon { width: 35px; height: 35px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="glass-container">
+    <div class="top-header-bar" id="topHeaderBar">
+        <div class="logo-area">
+            <div class="coin-icon">R$</div>
+            <div class="logo-text">MEUS GANHOS</div>
+        </div>
+        <div class="settings-btn" id="settingsBtn">
+            <i class="fas fa-cog"></i>
+        </div>
+    </div>
+
+    <div class="fixed-header">
+        <div class="unified-header" id="mainHeader">
+            <div class="month-header-container">
+                <button id="prevMonthBtn" class="nav-arrow"><i class="fas fa-chevron-left"></i></button>
+                <div class="month-year-container">
+                    <div id="monthYearClickable" class="month-year-clickable">
+                        <span id="monthNameDisplay" class="month-name">---</span>
+                        <span id="yearDisplay" class="year-number">----</span>
+                    </div>
+                </div>
+                <button id="nextMonthBtn" class="nav-arrow"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="balance-section">
+                <div class="balance-label">GANHOS TOTAIS DO MÊS</div>
+                <div id="monthTotalAmount" class="balance-value balance-zero">R$ 0,00</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="monthlyView" class="scrollable-weeks">
+        <div id="weeksAccordionContainer"></div>
+    </div>
+    
+    <div id="weeklyView" class="weekly-view-container hidden">
+        <div id="weeklyContent"></div>
+    </div>
+</div>
+
+<div id="editModal" class="modal-overlay">
+    <div class="edit-panel">
+        <div class="modal-header">
+            <button id="dotsMenuBtn" class="dots-menu-btn"><i class="fas fa-ellipsis-v"></i></button>
+            <div id="absenceMenu" class="absence-menu">
+                <div class="menu-item falta-item" data-type="falta"><i class="fas fa-times-circle"></i> Falta</div>
+                <div class="menu-item falta-justificada-item" data-type="falta_justificada"><i class="fas fa-file-alt"></i> Falta Justificada</div>
+                <div class="menu-item doente-item" data-type="doente"><i class="fas fa-thermometer-half"></i> Doente</div>
+                <div class="menu-item feriado-item" data-type="feriado"><i class="fas fa-calendar-day"></i> Dia Santo / Feriado</div>
+                <div class="menu-item sem-servico-item" data-type="sem_servico"><i class="fas fa-briefcase-slash"></i> Não Houve serviço</div>
+                <div class="menu-item share-item" data-type="compartilhar"><i class="fab fa-whatsapp"></i> Compartilhar Descrição</div>
+                <div class="menu-item remover-item" data-type="remover"><i class="fas fa-trash-alt"></i> Remover Status</div>
+            </div>
+            <div class="modal-header-icon"><i class="fas fa-coins"></i></div>
+            <div class="modal-header-title" id="modalDayTitle">Editar dia</div>
+        </div>
+        <div class="modal-body">
+            <div class="value-field">
+                <div class="value-input-wrapper">
+                    <span class="currency-symbol">R$</span>
+                    <input type="number" id="editValor" class="value-input" step="0.01" placeholder="0,00">
+                </div>
+            </div>
+            <div class="desc-field">
+                <textarea id="editDescricao" class="desc-textarea" rows="3" placeholder="Descrição..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button id="cancelModalBtn" class="btn-cancel-modal">Cancelar</button>
+                <button id="confirmModalBtn" class="btn-save-modal"><i class="fas fa-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const WEEK_DAYS_MAP = { 1: "Segunda-feira", 2: "Terça-feira", 3: "Quarta-feira", 4: "Quinta-feira", 5: "Sexta-feira", 6: "Sábado" };
+    let allDaysData = {};
+    let transferDecisions = {};
+    let currentYearMonth = "";
+    let currentWeeklyData = null;
+
+    // Elementos DOM
+    const topHeaderBar = document.getElementById("topHeaderBar");
+    const monthNameSpan = document.getElementById("monthNameDisplay");
+    const yearSpan = document.getElementById("yearDisplay");
+    const prevBtn = document.getElementById("prevMonthBtn");
+    const nextBtn = document.getElementById("nextMonthBtn");
+    const monthYearClickable = document.getElementById("monthYearClickable");
+    const monthTotalSpan = document.getElementById("monthTotalAmount");
+    const weeksContainer = document.getElementById("weeksAccordionContainer");
+    const monthlyView = document.getElementById("monthlyView");
+    const weeklyView = document.getElementById("weeklyView");
+    const mainHeader = document.getElementById("mainHeader");
+    const weeklyContent = document.getElementById("weeklyContent");
+    const editModal = document.getElementById("editModal");
+    const modalTitle = document.getElementById("modalDayTitle");
+    const editValor = document.getElementById("editValor");
+    const editDesc = document.getElementById("editDescricao");
+    const confirmBtn = document.getElementById("confirmModalBtn");
+    const cancelBtn = document.getElementById("cancelModalBtn");
+    const dotsMenuBtn = document.getElementById("dotsMenuBtn");
+    const absenceMenu = document.getElementById("absenceMenu");
+    const settingsBtn = document.getElementById("settingsBtn");
+    
+    let currentEdit = null;
+    let isMenuOpen = false;
+    let modalStack = [];
+    let isHandlingPopState = false;
+
+    // Funções utilitárias
+    function getCurrentYearMonth() { 
+        const d = new Date(); 
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; 
+    }
+    
+    function getDateKey(y,m,d) { 
+        return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; 
+    }
+    
+    function saveToLocalStorage() { 
+        try {
+            localStorage.setItem("ganhosProMesVisual", JSON.stringify({ allDaysData, transferDecisions, currentYearMonth }));
+        } catch(e) { console.warn("Erro ao salvar:", e); }
+    }
+    
+    function loadFromLocalStorage() {
+        try {
+            const s = localStorage.getItem("ganhosProMesVisual");
+            if(s) { 
+                const p = JSON.parse(s); 
+                allDaysData = p.allDaysData || {}; 
+                transferDecisions = p.transferDecisions || {}; 
+                currentYearMonth = p.currentYearMonth || getCurrentYearMonth(); 
+            } else { 
+                allDaysData = {}; 
+                transferDecisions = {}; 
+                currentYearMonth = getCurrentYearMonth(); 
+            }
+        } catch(e) { 
+            allDaysData = {}; 
+            transferDecisions = {}; 
+            currentYearMonth = getCurrentYearMonth(); 
+        }
+    }
+    
+    function getDayValue(y,m,d) { 
+        const key = getDateKey(y,m,d);
+        if (allDaysData[key]) return allDaysData[key];
+        return { valor: 0, descricao: "", status: null }; 
+    }
+    
+    function updateDayData(y,m,d, data) { 
+        const key = getDateKey(y,m,d);
+        allDaysData[key] = data; 
+        saveToLocalStorage(); 
+        if (currentWeeklyData) renderWeeklyView(currentWeeklyData.week, currentWeeklyData.weekIdx);
+        else renderUI();
+    }
+
+    function computeWeekTotal(week) { 
+        return week.reduce((sum, d) => sum + (getDayValue(d.year,d.month,d.day).valor || 0), 0); 
+    }
+    
+    function computeGlobalMonthTotal(weeks) { 
+        return weeks.reduce((sum, w) => sum + computeWeekTotal(w), 0); 
+    }
+    
+    function weekHasAnyValue(week) {
+        return week.some(day => {
+            const val = getDayValue(day.year, day.month, day.day);
+            return val.valor > 0 || val.status;
+        });
+    }
+    
+    function isWeekCurrent(week) {
+        const today = new Date();
+        const weekStart = new Date(week[0].date);
+        const weekEnd = new Date(week[5].date);
+        weekStart.setHours(0, 0, 0, 0);
+        weekEnd.setHours(23, 59, 59, 999);
+        return today >= weekStart && today <= weekEnd;
+    }
+    
+    function getWeekHeaderClass(week) {
+        const isCurrent = isWeekCurrent(week);
+        const hasValues = weekHasAnyValue(week);
+        if (isCurrent) return "week-current";
+        if (!isCurrent && hasValues) return "week-past-with-values";
+        return "week-default";
+    }
+
+    function getWeeksForMonth(targetYear, targetMonth, existingDecision = null) {
+        const firstDay = new Date(targetYear, targetMonth-1, 1);
+        const lastDay = new Date(targetYear, targetMonth, 0);
+        let firstMonday = new Date(firstDay);
+        while (firstMonday.getDay() !== 1) firstMonday.setDate(firstMonday.getDate() - 1);
+        let allWeeks = [], cursor = new Date(firstMonday);
+        while (cursor <= lastDay) {
+            let week = [];
+            for (let i=0; i<6; i++) { 
+                let d = new Date(cursor); 
+                d.setDate(cursor.getDate()+i); 
+                week.push({ date:d, dayOfWeek:d.getDay(), year:d.getFullYear(), month:d.getMonth()+1, day:d.getDate() }); 
+            }
+            allWeeks.push(week);
+            cursor.setDate(cursor.getDate()+7);
+        }
+        let result = [];
+        const decKey = `${targetYear}-${targetMonth}`;
+        let decision = existingDecision !== null ? existingDecision : transferDecisions[decKey];
+        for (let week of allWeeks) {
+            let daysIn = week.filter(d => d.month === targetMonth).length;
+            let containsLast = week.some(d => d.date.getTime() === lastDay.getTime());
+            if (daysIn >= 4) result.push(week);
+            else if (daysIn === 3 && containsLast) {
+                if (decision !== undefined) { 
+                    if (decision === true) result.push(week); 
+                } else return { needsDecision: true, weekData: week };
+            }
+            else if (daysIn === 3 && !containsLast) result.push(week);
+        }
+        return { weeks: result, needsDecision: false };
+    }
+
+    async function askUserDecision(year, month, week) {
+        const start = week[0].date, end = week[5].date;
+        const startStr = `${start.getDate()}/${start.getMonth()+1}`, endStr = `${end.getDate()}/${end.getMonth()+1}`;
+        const monthName = new Date(year, month-1,1).toLocaleString('pt-BR',{month:'long'});
+        return new Promise((resolve) => {
+            const div = document.createElement("div");
+            div.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;z-index:4000;";
+            div.innerHTML = `<div style="background:#0f172a;border-radius:1rem;padding:1.5rem;max-width:380px;text-align:center;"><i class="fas fa-calendar-week" style="font-size:2rem;color:#facc15;"></i><h3 style="color:#facc15;margin:12px 0">Semana com 3 dias</h3><p>A semana de <strong>${startStr} a ${endStr}</strong> tem 3 dias em ${monthName}.</p><div class="decision-buttons"><button id="decKeep" class="btn-decision btn-keep">✓ Manter</button><button id="decTransfer" class="btn-decision btn-transfer">⏩ Transferir</button></div></div>`;
+            document.body.appendChild(div);
+            const close = () => div.remove();
+            const keep = div.querySelector("#decKeep"), transf = div.querySelector("#decTransfer");
+            keep.onclick = () => { close(); resolve(true); };
+            transf.onclick = () => { close(); resolve(false); };
+            modalStack.push({ close: close });
+            history.pushState({}, '');
+        });
+    }
+
+    function toggleTopHeader(show) {
+        if (topHeaderBar) {
+            if (show) topHeaderBar.classList.remove("hidden-header");
+            else topHeaderBar.classList.add("hidden-header");
+        }
+    }
+
+    function pushModalLayer(closeHandler) { 
+        modalStack.push({ close: closeHandler }); 
+        history.pushState({}, ''); 
+    }
+    
+    function popModalLayer() { 
+        if (modalStack.length) { 
+            const top = modalStack.pop(); 
+            if (top.close) top.close(); 
+            return true; 
+        } 
+        return false; 
+    }
+
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "toast-message";
+        toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
+
+    // Função para resetar o estilo do botão de configurações
+    function resetSettingsButton() {
+        if (settingsBtn) {
+            settingsBtn.style.background = "";
+            settingsBtn.style.borderColor = "";
+            settingsBtn.style.color = "";
+            settingsBtn.style.transform = "";
+        }
+    }
+
+    function openSettingsModal() {
+        const overlay = document.createElement("div");
+        overlay.className = "settings-modal-overlay";
+        overlay.innerHTML = `
+            <div class="settings-modal">
+                <div class="settings-header"><h3><i class="fas fa-cog"></i> CONFIGURAÇÕES</h3></div>
+                <div class="settings-body">
+                    <div class="info-card">
+                        <div class="developer-name">© N.L.R.F</div>
+                        <div class="developer-title">DESENVOLVEDOR</div>
+                        <div class="support-email"><i class="fas fa-envelope"></i> ideiasesolucoes.nlrf@gmail.com</div>
+                        <div class="version-info">Versão 2.00 | 2026</div>
+                    </div>
+                    <div class="close-settings" id="closeSettingsBtn"><i class="fas fa-times"></i> Fechar</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        const closeModal = () => {
+            overlay.remove();
+            resetSettingsButton();
+            popModalLayer();
+        };
+        overlay.querySelector("#closeSettingsBtn").onclick = closeModal;
+        overlay.onclick = (e) => { if(e.target === overlay) closeModal(); };
+        pushModalLayer(closeModal);
+    }
+
+    function openEditModal(y, m, d, dayLabel, currentData) {
+        currentEdit = { year: y, month: m, day: d, label: dayLabel };
+        modalTitle.innerHTML = `${dayLabel} • ${d}/${m}/${y}`;
+        editValor.value = currentData.valor > 0 ? currentData.valor : "";
+        editDesc.value = currentData.descricao || "";
+        editModal.classList.add("active");
+        pushModalLayer(() => { 
+            editModal.classList.remove("active"); 
+            currentEdit = null; 
+            absenceMenu.classList.remove('active'); 
+            isMenuOpen = false;
+        });
+    }
+
+    function applyStatus(type) {
+        if (!currentEdit) return;
+        let statusLabel = "";
+        if (type === 'falta') statusLabel = "Falta";
+        if (type === 'falta_justificada') statusLabel = "Falta Justificada";
+        if (type === 'doente') statusLabel = "Doente";
+        if (type === 'feriado') statusLabel = "Dia Santo/Feriado";
+        if (type === 'sem_servico') statusLabel = "Não Houve serviço";
+        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: statusLabel, status: type });
+        editModal.classList.remove("active"); 
+        popModalLayer(); 
+        currentEdit = null; 
+        absenceMenu.classList.remove('active'); 
+        isMenuOpen = false;
+    }
+
+    function removeStatus() {
+        if (!currentEdit) return;
+        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: "", status: null });
+        editModal.classList.remove("active"); 
+        popModalLayer(); 
+        currentEdit = null; 
+        absenceMenu.classList.remove('active'); 
+        isMenuOpen = false;
+    }
+
+    function shareDescription() {
+        if (!currentEdit) return;
+        const descText = editDesc.value.trim();
+        if (!descText) { showToast("Nenhuma descrição para compartilhar"); return; }
+        const message = `${currentEdit.label} - ${currentEdit.day}/${currentEdit.month}/${currentEdit.year}\n${descText}`;
+        const encodedMsg = encodeURIComponent(message);
+        window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+        absenceMenu.classList.remove('active');
+        isMenuOpen = false;
+    }
+
+    function saveNormalValue() {
+        if (!currentEdit) return;
+        let val = parseFloat(editValor.value);
+        if (isNaN(val)) val = 0;
+        if (val < 0) val = 0;
+        const desc = editDesc.value.trim() || "";
+        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: val, descricao: desc, status: null });
+        editModal.classList.remove("active"); 
+        popModalLayer(); 
+        currentEdit = null;
+    }
+
+    function getDayCardClass(dayValue) {
+        if (dayValue.status === 'falta') return "day-falta";
+        if (dayValue.status === 'falta_justificada') return "day-falta-justificada";
+        if (dayValue.status === 'doente') return "day-doente";
+        if (dayValue.status === 'feriado') return "day-feriado";
+        if (dayValue.status === 'sem_servico') return "day-sem-servico";
+        if (dayValue.valor > 0) return "day-has-value";
+        return "day-default";
+    }
+
+    function getStatusBadge(status) {
+        if (status === 'falta') return `<span class="absence-badge-3d falta-badge"><i class="fas fa-times-circle"></i> Falta</span>`;
+        if (status === 'falta_justificada') return `<span class="absence-badge-3d falta-badge"><i class="fas fa-file-alt"></i> Falta Justificada</span>`;
+        if (status === 'doente') return `<span class="absence-badge-3d doente-badge"><i class="fas fa-thermometer-half"></i> Doente</span>`;
+        if (status === 'feriado') return `<span class="absence-badge-3d feriado-badge"><i class="fas fa-calendar-day"></i> Feriado</span>`;
+        if (status === 'sem_servico') return `<span class="absence-badge-3d sem-servico-badge"><i class="fas fa-briefcase-slash"></i> Sem serviço</span>`;
+        return '';
+    }
+
+    function renderWeeklyView(week, weekIdx) {
+        const start = week[0].date;
+        const end = week[5].date;
+        const monthNameLong = start.toLocaleString('pt-BR', { month: 'long' });
+        const monthNameCapitalized = monthNameLong.charAt(0).toUpperCase() + monthNameLong.slice(1);
+        const year = start.getFullYear();
+        let weekTotal = computeWeekTotal(week);
+        
+        let html = `<div class="weekly-header">
+                        <div class="back-button" id="backToMonthlyBtn"><i class="fas fa-arrow-left"></i></div>
+                        <div class="weekly-header-title">
+                            <h2>Semana ${weekIdx + 1}</h2>
+                            <p>${start.getDate()} a ${end.getDate()} de ${monthNameCapitalized} • ${year}</p>
+                        </div>
+                    </div>
+                    <div class="week-total-container">
+                        <div class="week-total-label">SALDO TOTAL DA SEMANA</div>
+                        <div class="week-total-amount">R$ ${weekTotal.toFixed(2)}</div>
+                    </div>`;
+        
+        for (let day of week) {
+            if (day.dayOfWeek === 0) continue;
+            const val = getDayValue(day.year, day.month, day.day);
+            let valueClass = "day-value-zero-3d";
+            let displayValue = `R$ ${val.valor.toFixed(2)}`;
+            let badgeHtml = "";
+            let cardClass = getDayCardClass(val);
+            
+            if (val.status) {
+                displayValue = "R$ 0,00";
+                badgeHtml = getStatusBadge(val.status);
+            } else if (val.valor > 0) {
+                valueClass = "day-value-positive-3d";
+            }
+            
+            html += `<div class="day-card-3d ${cardClass}" data-day="${day.day}" data-month="${day.month}" data-year="${day.year}" data-dow="${day.dayOfWeek}">
+                        <div><span class="day-name-3d">${WEEK_DAYS_MAP[day.dayOfWeek].toUpperCase()}</span><br><span class="day-date-3d">${day.day}/${day.month}</span></div>
+                        <div class="day-right-side-3d">${badgeHtml}<span class="day-value-3d ${valueClass}">${displayValue}</span></div>
+                    </div>`;
+        }
+        
+        weeklyContent.innerHTML = html;
+        
+        document.getElementById("backToMonthlyBtn").onclick = () => backToMonthlyView();
+        
+        document.querySelectorAll("#weeklyContent .day-card-3d").forEach(card => {
+            const year = parseInt(card.dataset.year);
+            const month = parseInt(card.dataset.month);
+            const day = parseInt(card.dataset.day);
+            const dow = parseInt(card.dataset.dow);
+            const val = getDayValue(year, month, day);
+            card.onclick = () => openEditModal(year, month, day, WEEK_DAYS_MAP[dow], val);
+        });
+    }
+
+    function backToMonthlyView() {
+        currentWeeklyData = null;
+        monthlyView.classList.remove("hidden");
+        weeklyView.classList.add("hidden");
+        mainHeader.classList.remove("hidden");
+        toggleTopHeader(true);
+        resetSettingsButton();
+        renderUI();
+        if (window.history.state && window.history.state.weekly) {
+            history.replaceState({}, '');
+        }
+    }
+
+    function openWeeklyView(week, weekIdx) {
+        currentWeeklyData = { week, weekIdx };
+        renderWeeklyView(week, weekIdx);
+        monthlyView.classList.add("hidden");
+        weeklyView.classList.remove("hidden");
+        mainHeader.classList.add("hidden");
+        toggleTopHeader(false);
+        history.pushState({ weekly: true }, '');
+    }
+
+    function renderWeeks(weeks) {
+        weeksContainer.innerHTML = "";
+        if (!weeks || weeks.length === 0) { 
+            weeksContainer.innerHTML = '<div style="text-align:center;padding:2rem;">Nenhuma semana</div>'; 
+            return; 
+        }
+        weeks.forEach((week, idx) => {
+            const weekTotal = computeWeekTotal(week);
+            const start = week[0].date, end = week[5].date;
+            const range = `${start.getDate()}/${start.getMonth()+1} - ${end.getDate()}/${end.getMonth()+1}`;
+            const accordion = document.createElement("div"); 
+            accordion.className = "week-accordion";
+            const header = document.createElement("div"); 
+            header.className = `week-header-accordion ${getWeekHeaderClass(week)}`;
+            header.innerHTML = `<div><div class="week-title-line"><span class="week-text">Semana</span><span class="week-num">${idx+1}</span></div><div class="week-range-compact">${range}</div></div><div class="week-total-badge ${weekTotal>0?'week-total-positive':'week-total-zero'}">R$ ${weekTotal.toFixed(2)}</div>`;
+            header.onclick = () => openWeeklyView(week, idx);
+            accordion.appendChild(header);
+            weeksContainer.appendChild(accordion);
+        });
+    }
+
+    async function renderUI() {
+        const [year, month] = currentYearMonth.split("-").map(Number);
+        const dateObj = new Date(year, month-1, 1);
+        let monthName = dateObj.toLocaleString('pt-BR', { month: 'long' });
+        monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+        monthNameSpan.innerText = monthName.toUpperCase();
+        yearSpan.innerText = year;
+        
+        let finalWeeks = [], total = 0;
+        const check = getWeeksForMonth(year, month, null);
+        if (check.needsDecision && check.weekData) {
+            const keep = await askUserDecision(year, month, check.weekData);
+            transferDecisions[`${year}-${month}`] = keep;
+            saveToLocalStorage();
+            const { weeks } = getWeeksForMonth(year, month, keep);
+            finalWeeks = weeks; total = computeGlobalMonthTotal(weeks);
+        } else {
+            const { weeks } = getWeeksForMonth(year, month, null);
+            finalWeeks = weeks; total = computeGlobalMonthTotal(weeks);
+        }
+        
+        monthTotalSpan.innerText = `R$ ${total.toFixed(2)}`;
+        if (total > 0) {
+            monthTotalSpan.classList.remove("balance-zero");
+            monthTotalSpan.classList.add("balance-positive");
+        } else {
+            monthTotalSpan.classList.remove("balance-positive");
+            monthTotalSpan.classList.add("balance-zero");
+        }
+        renderWeeks(finalWeeks);
+    }
+
+    function showFullCalendar() {
+        const [year, month] = currentYearMonth.split("-").map(Number);
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const firstDayOfMonth = new Date(year, month-1, 1);
+        let startOffset = firstDayOfMonth.getDay();
+        
+        let html = `<div class="calendar-modal"><h3 style="text-align:center;color:#facc15;">${monthNameSpan.innerText} ${year}</h3><div class="calendar-grid">`;
+        ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"].forEach(w => html += `<div class="cal-weekday">${w}</div>`);
+        for(let i=0; i<startOffset; i++) html += `<div class="cal-day"></div>`;
+        for(let d=1; d<=daysInMonth; d++) {
+            const val = getDayValue(year, month, d);
+            let cls = val.valor > 0 ? "has-value" : "";
+            html += `<div class="cal-day ${cls}" data-day="${d}">${d}</div>`;
+        }
+        html += `</div><button class="close-modal-btn" id="closeCal">Fechar</button></div>`;
+        
+        const overlay = document.createElement("div");
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;z-index:3000;";
+        overlay.innerHTML = html;
+        document.body.appendChild(overlay);
+        const close = () => overlay.remove();
+        pushModalLayer(close);
+        overlay.querySelector("#closeCal").onclick = close;
+        overlay.onclick = (e) => { if(e.target === overlay) close(); };
+        
+        overlay.querySelectorAll(".cal-day").forEach(el => {
+            if(!el.hasAttribute("data-day")) return;
+            const day = parseInt(el.dataset.day);
+            el.onclick = () => {
+                const date = new Date(year, month-1, day);
+                const dow = date.getDay();
+                if(dow >= 1 && dow <= 6) {
+                    const dayNames = {1:"Segunda-feira",2:"Terça-feira",3:"Quarta-feira",4:"Quinta-feira",5:"Sexta-feira",6:"Sábado"};
+                    close();
+                    openEditModal(year, month, day, dayNames[dow], getDayValue(year, month, day));
+                }
+            };
+        });
+    }
+
+    function changeMonth(delta) {
+        if (currentWeeklyData) return;
+        let [y,m] = currentYearMonth.split("-").map(Number);
+        let nm = m + delta, ny = y;
+        if(nm<1){ nm=12; ny--; }
+        if(nm>12){ nm=1; ny++; }
+        currentYearMonth = `${ny}-${String(nm).padStart(2,'0')}`;
+        saveToLocalStorage();
+        renderUI();
+    }
+
+    // Event listeners
+    prevBtn.onclick = () => changeMonth(-1);
+    nextBtn.onclick = () => changeMonth(1);
+    monthYearClickable.onclick = showFullCalendar;
+    settingsBtn.onclick = openSettingsModal;
+    
+    confirmBtn.onclick = saveNormalValue;
+    cancelBtn.onclick = () => { if(editModal.classList.contains("active")){ editModal.classList.remove("active"); popModalLayer(); currentEdit = null; absenceMenu.classList.remove('active'); isMenuOpen = false; } };
+    
+    dotsMenuBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (isMenuOpen) {
+            absenceMenu.classList.remove('active');
+            isMenuOpen = false;
+        } else {
+            absenceMenu.classList.add('active');
+            isMenuOpen = true;
+        }
+    };
+    
+    document.addEventListener('click', function(event) {
+        if (isMenuOpen && !dotsMenuBtn.contains(event.target) && !absenceMenu.contains(event.target)) {
+            absenceMenu.classList.remove('active');
+            isMenuOpen = false;
+        }
+    });
+    
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.onclick = (e) => {
+            e.stopPropagation();
+            const type = item.dataset.type;
+            if (type === 'falta') applyStatus('falta');
+            else if (type === 'falta_justificada') applyStatus('falta_justificada');
+            else if (type === 'doente') applyStatus('doente');
+            else if (type === 'feriado') applyStatus('feriado');
+            else if (type === 'sem_servico') applyStatus('sem_servico');
+            else if (type === 'compartilhar') shareDescription();
+            else if (type === 'remover') removeStatus();
+        };
+    });
+    
+    window.addEventListener('popstate', () => {
+        if (isHandlingPopState) return;
+        isHandlingPopState = true;
+        if (modalStack.length) popModalLayer();
+        else if (currentWeeklyData !== null) backToMonthlyView();
+        isHandlingPopState = false;
+    });
+    
+    history.replaceState({}, '');
+    
+    // Inicialização
+    loadFromLocalStorage();
+    renderUI();
+    toggleTopHeader(true);
+    resetSettingsButton();
+</script>
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</body>
+</html>
