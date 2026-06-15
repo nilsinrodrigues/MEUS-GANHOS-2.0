@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -128,7 +127,6 @@
             font-size: 1.2rem;
         }
 
-        /* Ícone de engrenagem para modo offline */
         .settings-btn::before {
             content: "⚙️";
             font-size: 1.2rem;
@@ -193,7 +191,6 @@
             transition: transform 0.15s ease;
         }
 
-        /* Ícones de seta para modo offline */
         .nav-arrow:first-child::before {
             content: "◀";
             font-size: 1rem;
@@ -360,7 +357,6 @@
             transition: all 0.2s ease;
         }
 
-        /* Ícone de voltar para modo offline */
         .back-button::before {
             content: "←";
             font-size: 1.2rem;
@@ -414,7 +410,8 @@
 
         .day-card-3d.day-falta { background: linear-gradient(145deg, #5a1a1a, #8b0000); border-left: 4px solid #e74c3c; }
         .day-card-3d.day-doente { background: linear-gradient(145deg, #5a3a1a, #8b5a00); border-left: 4px solid #f39c12; }
-        .day-card-3d.day-feriado { background: linear-gradient(145deg, #2a4a1a, #2e6b1f); border-left: 4px solid var(--accent-color); }
+        .day-card-3d.day-dia-santo { background: linear-gradient(145deg, #2a4a1a, #2e6b1f); border-left: 4px solid #a335ee; }
+        .day-card-3d.day-feriado { background: linear-gradient(145deg, #2a4a6a, #1e5a8a); border-left: 4px solid var(--accent-color); }
         .day-card-3d.day-sem-servico { background: linear-gradient(145deg, #4a4a1a, #6b6b1f); border-left: 4px solid #95a5a6; }
         .day-card-3d.day-falta-justificada { background: linear-gradient(145deg, #4a3a1a, #6b5a1f); border-left: 4px solid #f39c12; }
         .day-card-3d.day-default { background: var(--card-bg); }
@@ -454,7 +451,8 @@
 
         .absence-badge-3d.falta-badge { background: rgba(231, 76, 60, 0.25); color: #ff8a7a; border: 1px solid rgba(231, 76, 60, 0.5); }
         .absence-badge-3d.doente-badge { background: rgba(243, 156, 18, 0.25); color: #f5b84a; border: 1px solid rgba(243, 156, 18, 0.5); }
-        .absence-badge-3d.feriado-badge { background: rgba(var(--accent-color-rgb), 0.25); color: var(--accent-color); }
+        .absence-badge-3d.dia-santo-badge { background: rgba(163, 53, 238, 0.25); color: #c77dff; border: 1px solid rgba(163, 53, 238, 0.5); }
+        .absence-badge-3d.feriado-badge { background: rgba(var(--accent-color-rgb), 0.25); color: var(--accent-color); border: 1px solid rgba(var(--accent-color-rgb), 0.5); }
         .absence-badge-3d.sem-servico-badge { background: rgba(149, 165, 166, 0.25); color: #bdc3c7; }
 
         .day-value-badge {
@@ -557,7 +555,6 @@
         
         .modal-header-icon i { display: none; }
         
-        /* Ícone de moeda para modo offline */
         .modal-header-icon::before {
             content: "💰";
             font-size: 2rem;
@@ -584,7 +581,6 @@
             z-index: 2600;
         }
         
-        /* Ícone de menu de 3 pontos para modo offline */
         .dots-menu-btn::before {
             content: "⋮";
             font-size: 1.2rem;
@@ -709,7 +705,6 @@
             gap: 8px;
         }
         
-        /* Ícone de salvar para modo offline */
         .btn-save-modal::before {
             content: "💾";
             font-size: 1rem;
@@ -786,7 +781,6 @@
 
         .support-email i { display: none; }
         
-        /* Ícone de email para modo offline */
         .support-email::before {
             content: "📧 ";
             color: var(--accent-color);
@@ -935,7 +929,6 @@
         }
         .decision-card i { display: none; }
         
-        /* Ícone de calendário para modo offline */
         .decision-card::before {
             content: "📅";
             font-size: 2rem;
@@ -1035,9 +1028,9 @@
                 <div class="menu-item falta-item" data-type="falta">❌ Falta</div>
                 <div class="menu-item falta-justificada-item" data-type="falta_justificada">📄 Falta Justificada</div>
                 <div class="menu-item doente-item" data-type="doente">🌡️ Doente</div>
-                <div class="menu-item feriado-item" data-type="feriado">📅 Dia Santo / Feriado</div>
+                <div class="menu-item dia-santo-item" data-type="dia_santo">📅 Dia Santo</div>
+                <div class="menu-item feriado-item" data-type="feriado">🎉 Feriado</div>
                 <div class="menu-item sem-servico-item" data-type="sem_servico">💼 Não Houve serviço</div>
-                <div class="menu-item share-item" data-type="compartilhar">💬 Compartilhar Descrição</div>
                 <div class="menu-item remover-item" data-type="remover">🗑️ Remover Status</div>
             </div>
             <div class="modal-header-icon"></div>
@@ -1218,7 +1211,7 @@
     function openSettingsModal() {
         const overlay = document.createElement("div");
         overlay.className = "settings-modal-overlay";
-        overlay.innerHTML = `<div class="settings-modal"><div class="settings-header"><h3>⚙️ CONFIGURAÇÕES</h3></div><div class="settings-body"><div class="info-card"><div class="developer-name">© N.L.R.F</div><div class="developer-title">DESENVOLVEDOR</div><div class="support-email"></div><div class="version-info">Versão 2.03 | 2026</div></div><div class="close-settings" id="closeSettingsBtn">✕ Fechar</div></div></div>`;
+        overlay.innerHTML = `<div class="settings-modal"><div class="settings-header"><h3>⚙️ CONFIGURAÇÕES</h3></div><div class="settings-body"><div class="info-card"><div class="developer-name">© N.L.R.F</div><div class="developer-title">DESENVOLVEDOR</div><div class="support-email"></div><div class="version-info">Versão 2.04 | 2026</div></div><div class="close-settings" id="closeSettingsBtn">✕ Fechar</div></div></div>`;
         document.body.appendChild(overlay);
         
         const emailSpan = overlay.querySelector('.support-email');
@@ -1247,6 +1240,7 @@
         if (type === 'falta') { statusDisplay = "Falta"; }
         if (type === 'falta_justificada') { statusDisplay = "Falta Justificada"; }
         if (type === 'doente') { statusDisplay = "Doente"; }
+        if (type === 'dia_santo') { statusDisplay = "Dia Santo"; }
         if (type === 'feriado') { statusDisplay = "Feriado"; }
         if (type === 'sem_servico') { statusDisplay = "Sem serviço"; }
         updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: statusDisplay, status: type });
@@ -1257,21 +1251,6 @@
         if (!currentEdit) return;
         updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: "", status: null });
         editModal.classList.remove("active"); popModalLayer(); currentEdit = null; absenceMenu.classList.remove('active'); isMenuOpen = false;
-    }
-
-    function shareDescriptionViaWhatsApp() {
-        if (!currentEdit) return;
-        const descText = editDesc.value.trim();
-        if (!descText) { showToast("Nenhuma descrição para compartilhar"); absenceMenu.classList.remove('active'); isMenuOpen = false; return; }
-        const message = `${currentEdit.label} - ${currentEdit.day}/${currentEdit.month}/${currentEdit.year}\n${descText}`;
-        const encoded = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/?text=${encoded}`;
-        window.open(whatsappUrl, '_blank');
-        absenceMenu.classList.remove('active');
-        isMenuOpen = false;
-        editModal.classList.remove("active");
-        popModalLayer();
-        currentEdit = null;
     }
 
     function saveNormalValue() {
@@ -1313,6 +1292,7 @@
         if (dayValue.status === 'falta') return "day-falta";
         if (dayValue.status === 'falta_justificada') return "day-falta-justificada";
         if (dayValue.status === 'doente') return "day-doente";
+        if (dayValue.status === 'dia_santo') return "day-dia-santo";
         if (dayValue.status === 'feriado') return "day-feriado";
         if (dayValue.status === 'sem_servico') return "day-sem-servico";
         if (dayValue.valor > 0) return "day-has-value";
@@ -1323,7 +1303,8 @@
         if (status === 'falta') return `<span class="absence-badge-3d falta-badge">❌ Falta</span>`;
         if (status === 'falta_justificada') return `<span class="absence-badge-3d falta-badge">📄 Falta Justificada</span>`;
         if (status === 'doente') return `<span class="absence-badge-3d doente-badge">🌡️ Doente</span>`;
-        if (status === 'feriado') return `<span class="absence-badge-3d feriado-badge">📅 Feriado</span>`;
+        if (status === 'dia_santo') return `<span class="absence-badge-3d dia-santo-badge">📅 Dia Santo</span>`;
+        if (status === 'feriado') return `<span class="absence-badge-3d feriado-badge">🎉 Feriado</span>`;
         if (status === 'sem_servico') return `<span class="absence-badge-3d sem-servico-badge">💼 Não Houve serviço</span>`;
         return '';
     }
@@ -1485,9 +1466,9 @@
                 if (type === 'falta') applyStatus('falta');
                 else if (type === 'falta_justificada') applyStatus('falta_justificada');
                 else if (type === 'doente') applyStatus('doente');
+                else if (type === 'dia_santo') applyStatus('dia_santo');
                 else if (type === 'feriado') applyStatus('feriado');
                 else if (type === 'sem_servico') applyStatus('sem_servico');
-                else if (type === 'compartilhar') shareDescriptionViaWhatsApp();
                 else if (type === 'remover') removeStatus();
             }; item._handler = handler; item.addEventListener('click', handler);
         });
