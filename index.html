@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -9,6 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
@@ -49,6 +51,24 @@
             flex-direction: column;
             height: calc(100vh - 2rem);
             overflow: hidden;
+            position: relative;
+        }
+
+        .offline-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            pointer-events: none;
         }
 
         .top-header-bar {
@@ -93,7 +113,6 @@
             text-transform: uppercase;
         }
 
-        /* Ícone de Configurações - Corrigido para não travar */
         .settings-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -109,10 +128,19 @@
             font-size: 1.2rem;
         }
 
+        /* Ícone de engrenagem para modo offline */
+        .settings-btn::before {
+            content: "⚙️";
+            font-size: 1.2rem;
+        }
+
+        .settings-btn i {
+            display: none;
+        }
+
         .settings-btn:hover {
             background: rgba(100, 108, 255, 0.2);
             border-color: rgba(100, 108, 255, 0.4);
-            color: #a0a0ff;
             transform: scale(1.05);
         }
 
@@ -120,7 +148,6 @@
             transform: scale(0.95);
         }
 
-        /* Remove qualquer estado fixo */
         .settings-btn:focus {
             outline: none;
         }
@@ -164,6 +191,21 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.15s ease;
+        }
+
+        /* Ícones de seta para modo offline */
+        .nav-arrow:first-child::before {
+            content: "◀";
+            font-size: 1rem;
+        }
+        
+        .nav-arrow:last-child::before {
+            content: "▶";
+            font-size: 1rem;
+        }
+        
+        .nav-arrow i {
+            display: none;
         }
 
         .nav-arrow:active {
@@ -318,6 +360,16 @@
             transition: all 0.2s ease;
         }
 
+        /* Ícone de voltar para modo offline */
+        .back-button::before {
+            content: "←";
+            font-size: 1.2rem;
+        }
+        
+        .back-button i {
+            display: none;
+        }
+
         .back-button:hover {
             transform: scale(1.05);
             background: rgba(var(--accent-color-rgb), 0.3);
@@ -382,14 +434,22 @@
             color: #a0b3d9;
         }
 
+        .day-right-side-3d {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
         .absence-badge-3d {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 0.375rem;
+            padding: 5px 12px;
+            border-radius: 0.5rem;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            white-space: nowrap;
         }
 
         .absence-badge-3d.falta-badge { background: rgba(231, 76, 60, 0.25); color: #ff8a7a; border: 1px solid rgba(231, 76, 60, 0.5); }
@@ -397,14 +457,30 @@
         .absence-badge-3d.feriado-badge { background: rgba(var(--accent-color-rgb), 0.25); color: var(--accent-color); }
         .absence-badge-3d.sem-servico-badge { background: rgba(149, 165, 166, 0.25); color: #bdc3c7; }
 
-        .day-value-3d {
+        .day-value-badge {
+            background: #0a0f1e;
+            border-radius: 0.75rem;
+            padding: 8px 18px;
             font-weight: 900;
-            font-size: 1.15rem;
+            font-size: 1.4rem;
             white-space: nowrap;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .day-value-positive-3d { color: var(--success-color); }
-        .day-value-zero-3d { color: var(--text-secondary); }
+        .day-value-positive-badge {
+            background: #0a0f1e;
+            border: 1px solid rgba(46, 204, 113, 0.5);
+            color: var(--success-color);
+            text-shadow: 0 0 4px rgba(46, 204, 113, 0.3);
+        }
+
+        .day-value-zero-badge {
+            background: #0a0f1e;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-secondary);
+        }
 
         .week-total-container {
             margin-bottom: 1.2rem;
@@ -479,7 +555,13 @@
             margin: 0 auto 1rem;
         }
         
-        .modal-header-icon i { font-size: 2rem; color: #0a0f1e; }
+        .modal-header-icon i { display: none; }
+        
+        /* Ícone de moeda para modo offline */
+        .modal-header-icon::before {
+            content: "💰";
+            font-size: 2rem;
+        }
         
         .modal-header-title {
             font-size: 1.3rem;
@@ -500,6 +582,16 @@
             font-size: 1rem;
             cursor: pointer;
             z-index: 2600;
+        }
+        
+        /* Ícone de menu de 3 pontos para modo offline */
+        .dots-menu-btn::before {
+            content: "⋮";
+            font-size: 1.2rem;
+        }
+        
+        .dots-menu-btn i {
+            display: none;
         }
         
         .absence-menu {
@@ -616,6 +708,16 @@
             align-items: center;
             gap: 8px;
         }
+        
+        /* Ícone de salvar para modo offline */
+        .btn-save-modal::before {
+            content: "💾";
+            font-size: 1rem;
+        }
+        
+        .btn-save-modal i {
+            display: none;
+        }
 
         .settings-modal-overlay {
             position: fixed;
@@ -682,7 +784,14 @@
             word-break: break-all;
         }
 
-        .support-email i { color: var(--accent-color); margin-right: 8px; }
+        .support-email i { display: none; }
+        
+        /* Ícone de email para modo offline */
+        .support-email::before {
+            content: "📧 ";
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
 
         .version-info {
             font-size: 0.7rem;
@@ -734,38 +843,173 @@
             gap: 10px;
         }
 
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 7000;
+        }
+        .share-content {
+            background: linear-gradient(145deg, #0f172a, #0a0f1e);
+            border-radius: 1.5rem;
+            max-width: 380px;
+            width: 90%;
+            padding: 1.8rem;
+            text-align: center;
+            border: 1px solid rgba(var(--accent-color-rgb), 0.3);
+        }
+        .share-content h4 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        .share-text-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: left;
+            font-size: 0.85rem;
+            word-break: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .share-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .share-buttons button {
+            padding: 0.7rem 1.2rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-copy-text {
+            background: var(--accent-color);
+            color: #0a0f1e;
+        }
+        .btn-close-share {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .btn-whatsapp-share {
+            background: #25D366;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .hidden { display: none !important; }
+
+        .decision-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.96);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+        }
+        .decision-card {
+            background: #0f172a;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 380px;
+            text-align: center;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            position: relative;
+        }
+        .decision-card i { display: none; }
+        
+        /* Ícone de calendário para modo offline */
+        .decision-card::before {
+            content: "📅";
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+            color: #facc15;
+        }
+        
+        .decision-card h3 {
+            color: #facc15;
+            margin: 12px 0;
+        }
+        .decision-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .decision-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #facc15;
+            transform: scale(1.1);
+        }
 
         @media (max-width: 680px) {
             .balance-value { font-size: 1.5rem; }
             .logo-text { font-size: 1.2rem; }
             .coin-icon { width: 35px; height: 35px; font-size: 1.1rem; }
+            .absence-badge-3d { font-size: 0.65rem; padding: 4px 8px; }
+            .day-value-badge { font-size: 1.2rem; padding: 6px 14px; }
+            .day-right-side-3d { gap: 8px; }
+        }
+
+        @media (max-width: 480px) {
+            .absence-badge-3d { font-size: 0.6rem; padding: 3px 6px; }
+            .day-value-badge { font-size: 1rem; padding: 5px 10px; }
+            .day-right-side-3d { gap: 6px; }
         }
     </style>
 </head>
 <body>
 <div class="glass-container">
+    <div class="offline-badge" id="offlineBadge" style="display: none;">MODO OFFLINE</div>
     <div class="top-header-bar" id="topHeaderBar">
         <div class="logo-area">
             <div class="coin-icon">R$</div>
             <div class="logo-text">MEUS GANHOS</div>
         </div>
-        <div class="settings-btn" id="settingsBtn">
-            <i class="fas fa-cog"></i>
-        </div>
+        <div class="settings-btn" id="settingsBtn"></div>
     </div>
 
     <div class="fixed-header">
         <div class="unified-header" id="mainHeader">
             <div class="month-header-container">
-                <button id="prevMonthBtn" class="nav-arrow"><i class="fas fa-chevron-left"></i></button>
+                <button id="prevMonthBtn" class="nav-arrow"></button>
                 <div class="month-year-container">
                     <div id="monthYearClickable" class="month-year-clickable">
                         <span id="monthNameDisplay" class="month-name">---</span>
                         <span id="yearDisplay" class="year-number">----</span>
                     </div>
                 </div>
-                <button id="nextMonthBtn" class="nav-arrow"><i class="fas fa-chevron-right"></i></button>
+                <button id="nextMonthBtn" class="nav-arrow"></button>
             </div>
             <div class="balance-section">
                 <div class="balance-label">GANHOS TOTAIS DO MÊS</div>
@@ -786,17 +1030,17 @@
 <div id="editModal" class="modal-overlay">
     <div class="edit-panel">
         <div class="modal-header">
-            <button id="dotsMenuBtn" class="dots-menu-btn"><i class="fas fa-ellipsis-v"></i></button>
+            <button id="dotsMenuBtn" class="dots-menu-btn"></button>
             <div id="absenceMenu" class="absence-menu">
-                <div class="menu-item falta-item" data-type="falta"><i class="fas fa-times-circle"></i> Falta</div>
-                <div class="menu-item falta-justificada-item" data-type="falta_justificada"><i class="fas fa-file-alt"></i> Falta Justificada</div>
-                <div class="menu-item doente-item" data-type="doente"><i class="fas fa-thermometer-half"></i> Doente</div>
-                <div class="menu-item feriado-item" data-type="feriado"><i class="fas fa-calendar-day"></i> Dia Santo / Feriado</div>
-                <div class="menu-item sem-servico-item" data-type="sem_servico"><i class="fas fa-briefcase-slash"></i> Não Houve serviço</div>
-                <div class="menu-item share-item" data-type="compartilhar"><i class="fab fa-whatsapp"></i> Compartilhar Descrição</div>
-                <div class="menu-item remover-item" data-type="remover"><i class="fas fa-trash-alt"></i> Remover Status</div>
+                <div class="menu-item falta-item" data-type="falta">❌ Falta</div>
+                <div class="menu-item falta-justificada-item" data-type="falta_justificada">📄 Falta Justificada</div>
+                <div class="menu-item doente-item" data-type="doente">🌡️ Doente</div>
+                <div class="menu-item feriado-item" data-type="feriado">📅 Dia Santo / Feriado</div>
+                <div class="menu-item sem-servico-item" data-type="sem_servico">💼 Não Houve serviço</div>
+                <div class="menu-item share-item" data-type="compartilhar">💬 Compartilhar Descrição</div>
+                <div class="menu-item remover-item" data-type="remover">🗑️ Remover Status</div>
             </div>
-            <div class="modal-header-icon"><i class="fas fa-coins"></i></div>
+            <div class="modal-header-icon"></div>
             <div class="modal-header-title" id="modalDayTitle">Editar dia</div>
         </div>
         <div class="modal-body">
@@ -811,7 +1055,7 @@
             </div>
             <div class="modal-actions">
                 <button id="cancelModalBtn" class="btn-cancel-modal">Cancelar</button>
-                <button id="confirmModalBtn" class="btn-save-modal"><i class="fas fa-save"></i> Salvar</button>
+                <button id="confirmModalBtn" class="btn-save-modal"> Salvar</button>
             </div>
         </div>
     </div>
@@ -823,8 +1067,8 @@
     let transferDecisions = {};
     let currentYearMonth = "";
     let currentWeeklyData = null;
+    let isRendering = false;
 
-    // Elementos DOM
     const topHeaderBar = document.getElementById("topHeaderBar");
     const monthNameSpan = document.getElementById("monthNameDisplay");
     const yearSpan = document.getElementById("yearDisplay");
@@ -846,93 +1090,36 @@
     const dotsMenuBtn = document.getElementById("dotsMenuBtn");
     const absenceMenu = document.getElementById("absenceMenu");
     const settingsBtn = document.getElementById("settingsBtn");
+    const offlineBadge = document.getElementById("offlineBadge");
     
     let currentEdit = null;
     let isMenuOpen = false;
     let modalStack = [];
-    let isHandlingPopState = false;
 
-    // Funções utilitárias
-    function getCurrentYearMonth() { 
-        const d = new Date(); 
-        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; 
+    function updateOfflineStatus() {
+        offlineBadge.style.display = !navigator.onLine ? "block" : "none";
     }
-    
-    function getDateKey(y,m,d) { 
-        return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; 
-    }
-    
-    function saveToLocalStorage() { 
-        try {
-            localStorage.setItem("ganhosProMesVisual", JSON.stringify({ allDaysData, transferDecisions, currentYearMonth }));
-        } catch(e) { console.warn("Erro ao salvar:", e); }
-    }
-    
+    window.addEventListener('online', updateOfflineStatus);
+    window.addEventListener('offline', updateOfflineStatus);
+    updateOfflineStatus();
+
+    function getCurrentYearMonth() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
+    function getDateKey(y,m,d) { return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+    function saveToLocalStorage() { try { localStorage.setItem("ganhosProMesVisual", JSON.stringify({ allDaysData, transferDecisions, currentYearMonth })); } catch(e) {} }
     function loadFromLocalStorage() {
         try {
             const s = localStorage.getItem("ganhosProMesVisual");
-            if(s) { 
-                const p = JSON.parse(s); 
-                allDaysData = p.allDaysData || {}; 
-                transferDecisions = p.transferDecisions || {}; 
-                currentYearMonth = p.currentYearMonth || getCurrentYearMonth(); 
-            } else { 
-                allDaysData = {}; 
-                transferDecisions = {}; 
-                currentYearMonth = getCurrentYearMonth(); 
-            }
-        } catch(e) { 
-            allDaysData = {}; 
-            transferDecisions = {}; 
-            currentYearMonth = getCurrentYearMonth(); 
-        }
+            if(s) { const p = JSON.parse(s); allDaysData = p.allDaysData || {}; transferDecisions = p.transferDecisions || {}; currentYearMonth = p.currentYearMonth || getCurrentYearMonth(); } 
+            else { allDaysData = {}; transferDecisions = {}; currentYearMonth = getCurrentYearMonth(); }
+        } catch(e) { allDaysData = {}; transferDecisions = {}; currentYearMonth = getCurrentYearMonth(); }
     }
-    
-    function getDayValue(y,m,d) { 
-        const key = getDateKey(y,m,d);
-        if (allDaysData[key]) return allDaysData[key];
-        return { valor: 0, descricao: "", status: null }; 
-    }
-    
-    function updateDayData(y,m,d, data) { 
-        const key = getDateKey(y,m,d);
-        allDaysData[key] = data; 
-        saveToLocalStorage(); 
-        if (currentWeeklyData) renderWeeklyView(currentWeeklyData.week, currentWeeklyData.weekIdx);
-        else renderUI();
-    }
-
-    function computeWeekTotal(week) { 
-        return week.reduce((sum, d) => sum + (getDayValue(d.year,d.month,d.day).valor || 0), 0); 
-    }
-    
-    function computeGlobalMonthTotal(weeks) { 
-        return weeks.reduce((sum, w) => sum + computeWeekTotal(w), 0); 
-    }
-    
-    function weekHasAnyValue(week) {
-        return week.some(day => {
-            const val = getDayValue(day.year, day.month, day.day);
-            return val.valor > 0 || val.status;
-        });
-    }
-    
-    function isWeekCurrent(week) {
-        const today = new Date();
-        const weekStart = new Date(week[0].date);
-        const weekEnd = new Date(week[5].date);
-        weekStart.setHours(0, 0, 0, 0);
-        weekEnd.setHours(23, 59, 59, 999);
-        return today >= weekStart && today <= weekEnd;
-    }
-    
-    function getWeekHeaderClass(week) {
-        const isCurrent = isWeekCurrent(week);
-        const hasValues = weekHasAnyValue(week);
-        if (isCurrent) return "week-current";
-        if (!isCurrent && hasValues) return "week-past-with-values";
-        return "week-default";
-    }
+    function getDayValue(y,m,d) { const key = getDateKey(y,m,d); if (allDaysData[key]) return allDaysData[key]; return { valor: 0, descricao: "", status: null }; }
+    function updateDayData(y,m,d, data) { const key = getDateKey(y,m,d); allDaysData[key] = data; saveToLocalStorage(); if (currentWeeklyData) renderWeeklyView(currentWeeklyData.week, currentWeeklyData.weekIdx); else renderUI(); }
+    function computeWeekTotal(week) { return week.reduce((sum, d) => sum + (getDayValue(d.year,d.month,d.day).valor || 0), 0); }
+    function computeGlobalMonthTotal(weeks) { return weeks.reduce((sum, w) => sum + computeWeekTotal(w), 0); }
+    function weekHasAnyValue(week) { return week.some(day => { const val = getDayValue(day.year, day.month, day.day); return val.valor > 0 || val.status; }); }
+    function isWeekCurrent(week) { const today = new Date(); const weekStart = new Date(week[0].date); const weekEnd = new Date(week[5].date); weekStart.setHours(0,0,0,0); weekEnd.setHours(23,59,59,999); return today >= weekStart && today <= weekEnd; }
+    function getWeekHeaderClass(week) { const isCurrent = isWeekCurrent(week); const hasValues = weekHasAnyValue(week); if (isCurrent) return "week-current"; if (!isCurrent && hasValues) return "week-past-with-values"; return "week-default"; }
 
     function getWeeksForMonth(targetYear, targetMonth, existingDecision = null) {
         const firstDay = new Date(targetYear, targetMonth-1, 1);
@@ -942,11 +1129,7 @@
         let allWeeks = [], cursor = new Date(firstMonday);
         while (cursor <= lastDay) {
             let week = [];
-            for (let i=0; i<6; i++) { 
-                let d = new Date(cursor); 
-                d.setDate(cursor.getDate()+i); 
-                week.push({ date:d, dayOfWeek:d.getDay(), year:d.getFullYear(), month:d.getMonth()+1, day:d.getDate() }); 
-            }
+            for (let i=0; i<6; i++) { let d = new Date(cursor); d.setDate(cursor.getDate()+i); week.push({ date:d, dayOfWeek:d.getDay(), year:d.getFullYear(), month:d.getMonth()+1, day:d.getDate() }); }
             allWeeks.push(week);
             cursor.setDate(cursor.getDate()+7);
         }
@@ -957,99 +1140,93 @@
             let daysIn = week.filter(d => d.month === targetMonth).length;
             let containsLast = week.some(d => d.date.getTime() === lastDay.getTime());
             if (daysIn >= 4) result.push(week);
-            else if (daysIn === 3 && containsLast) {
+            else if (daysIn === 3 && containsLast) { 
                 if (decision !== undefined) { 
                     if (decision === true) result.push(week); 
-                } else return { needsDecision: true, weekData: week };
+                } else {
+                    return { needsDecision: true, weekData: week, decisionKey: decKey };
+                }
             }
             else if (daysIn === 3 && !containsLast) result.push(week);
         }
         return { weeks: result, needsDecision: false };
     }
 
-    async function askUserDecision(year, month, week) {
+    function askUserDecision(year, month, week, decisionKey) {
         const start = week[0].date, end = week[5].date;
         const startStr = `${start.getDate()}/${start.getMonth()+1}`, endStr = `${end.getDate()}/${end.getMonth()+1}`;
         const monthName = new Date(year, month-1,1).toLocaleString('pt-BR',{month:'long'});
+        
         return new Promise((resolve) => {
-            const div = document.createElement("div");
-            div.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;z-index:4000;";
-            div.innerHTML = `<div style="background:#0f172a;border-radius:1rem;padding:1.5rem;max-width:380px;text-align:center;"><i class="fas fa-calendar-week" style="font-size:2rem;color:#facc15;"></i><h3 style="color:#facc15;margin:12px 0">Semana com 3 dias</h3><p>A semana de <strong>${startStr} a ${endStr}</strong> tem 3 dias em ${monthName}.</p><div class="decision-buttons"><button id="decKeep" class="btn-decision btn-keep">✓ Manter</button><button id="decTransfer" class="btn-decision btn-transfer">⏩ Transferir</button></div></div>`;
-            document.body.appendChild(div);
-            const close = () => div.remove();
-            const keep = div.querySelector("#decKeep"), transf = div.querySelector("#decTransfer");
-            keep.onclick = () => { close(); resolve(true); };
-            transf.onclick = () => { close(); resolve(false); };
-            modalStack.push({ close: close });
-            history.pushState({}, '');
+            const overlay = document.createElement("div");
+            overlay.className = "decision-overlay";
+            overlay.innerHTML = `
+                <div class="decision-card">
+                    <button class="decision-close-btn" id="decisionCloseBtn">✕</button>
+                    <h3>Semana com 3 dias</h3>
+                    <p>A semana de <strong>${startStr} a ${endStr}</strong> tem 3 dias em ${monthName}.</p>
+                    <div class="decision-buttons">
+                        <button id="decKeep" class="btn-decision btn-keep">✓ Manter (3 dias)</button>
+                        <button id="decTransfer" class="btn-decision btn-transfer">⏩ Transferir para próxima semana</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            
+            const closeModal = (result) => {
+                if (overlay && overlay.remove) {
+                    overlay.remove();
+                }
+                resolve(result);
+            };
+            
+            const closeBtn = overlay.querySelector("#decisionCloseBtn");
+            if (closeBtn) {
+                closeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    closeModal(null);
+                };
+            }
+            
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeModal(null);
+                }
+            });
+            
+            const keepBtn = overlay.querySelector("#decKeep");
+            const transferBtn = overlay.querySelector("#decTransfer");
+            
+            if (keepBtn) {
+                keepBtn.onclick = () => {
+                    closeModal(true);
+                };
+            }
+            if (transferBtn) {
+                transferBtn.onclick = () => {
+                    closeModal(false);
+                };
+            }
         });
     }
 
-    function toggleTopHeader(show) {
-        if (topHeaderBar) {
-            if (show) topHeaderBar.classList.remove("hidden-header");
-            else topHeaderBar.classList.add("hidden-header");
-        }
-    }
-
-    function pushModalLayer(closeHandler) { 
-        modalStack.push({ close: closeHandler }); 
-        history.pushState({}, ''); 
-    }
-    
-    function popModalLayer() { 
-        if (modalStack.length) { 
-            const top = modalStack.pop(); 
-            if (top.close) top.close(); 
-            return true; 
-        } 
-        return false; 
-    }
-
-    function showToast(message) {
-        const toast = document.createElement("div");
-        toast.className = "toast-message";
-        toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
-        document.body.appendChild(toast);
-        setTimeout(() => {
-            toast.style.opacity = "0";
-            setTimeout(() => toast.remove(), 300);
-        }, 2500);
-    }
-
-    // Função para resetar o estilo do botão de configurações
-    function resetSettingsButton() {
-        if (settingsBtn) {
-            settingsBtn.style.background = "";
-            settingsBtn.style.borderColor = "";
-            settingsBtn.style.color = "";
-            settingsBtn.style.transform = "";
-        }
-    }
+    function toggleTopHeader(show) { if (topHeaderBar) { if (show) topHeaderBar.classList.remove("hidden-header"); else topHeaderBar.classList.add("hidden-header"); } }
+    function pushModalLayer(closeHandler) { modalStack.push({ close: closeHandler }); history.pushState({}, ''); }
+    function popModalLayer() { if (modalStack.length) { const top = modalStack.pop(); if (top.close) top.close(); return true; } return false; }
+    function showToast(message) { const toast = document.createElement("div"); toast.className = "toast-message"; toast.innerHTML = `ℹ️ ${message}`; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 300); }, 2500); }
 
     function openSettingsModal() {
         const overlay = document.createElement("div");
         overlay.className = "settings-modal-overlay";
-        overlay.innerHTML = `
-            <div class="settings-modal">
-                <div class="settings-header"><h3><i class="fas fa-cog"></i> CONFIGURAÇÕES</h3></div>
-                <div class="settings-body">
-                    <div class="info-card">
-                        <div class="developer-name">© N.L.R.F</div>
-                        <div class="developer-title">DESENVOLVEDOR</div>
-                        <div class="support-email"><i class="fas fa-envelope"></i> ideiasesolucoes.nlrf@gmail.com</div>
-                        <div class="version-info">Versão 2.00 | 2026</div>
-                    </div>
-                    <div class="close-settings" id="closeSettingsBtn"><i class="fas fa-times"></i> Fechar</div>
-                </div>
-            </div>
-        `;
+        overlay.innerHTML = `<div class="settings-modal"><div class="settings-header"><h3>⚙️ CONFIGURAÇÕES</h3></div><div class="settings-body"><div class="info-card"><div class="developer-name">© N.L.R.F</div><div class="developer-title">DESENVOLVEDOR</div><div class="support-email"></div><div class="version-info">Versão 2.03 | 2026</div></div><div class="close-settings" id="closeSettingsBtn">✕ Fechar</div></div></div>`;
         document.body.appendChild(overlay);
-        const closeModal = () => {
-            overlay.remove();
-            resetSettingsButton();
-            popModalLayer();
-        };
+        
+        const emailSpan = overlay.querySelector('.support-email');
+        if (emailSpan) {
+            emailSpan.innerHTML = 'ideiasesolucoes.nlrf@gmail.com';
+        }
+        
+        const closeModal = () => { overlay.remove(); popModalLayer(); };
         overlay.querySelector("#closeSettingsBtn").onclick = closeModal;
         overlay.onclick = (e) => { if(e.target === overlay) closeModal(); };
         pushModalLayer(closeModal);
@@ -1061,58 +1238,72 @@
         editValor.value = currentData.valor > 0 ? currentData.valor : "";
         editDesc.value = currentData.descricao || "";
         editModal.classList.add("active");
-        pushModalLayer(() => { 
-            editModal.classList.remove("active"); 
-            currentEdit = null; 
-            absenceMenu.classList.remove('active'); 
-            isMenuOpen = false;
-        });
+        pushModalLayer(() => { editModal.classList.remove("active"); currentEdit = null; absenceMenu.classList.remove('active'); isMenuOpen = false; });
     }
 
     function applyStatus(type) {
         if (!currentEdit) return;
-        let statusLabel = "";
-        if (type === 'falta') statusLabel = "Falta";
-        if (type === 'falta_justificada') statusLabel = "Falta Justificada";
-        if (type === 'doente') statusLabel = "Doente";
-        if (type === 'feriado') statusLabel = "Dia Santo/Feriado";
-        if (type === 'sem_servico') statusLabel = "Não Houve serviço";
-        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: statusLabel, status: type });
-        editModal.classList.remove("active"); 
-        popModalLayer(); 
-        currentEdit = null; 
-        absenceMenu.classList.remove('active'); 
-        isMenuOpen = false;
+        let statusDisplay = "";
+        if (type === 'falta') { statusDisplay = "Falta"; }
+        if (type === 'falta_justificada') { statusDisplay = "Falta Justificada"; }
+        if (type === 'doente') { statusDisplay = "Doente"; }
+        if (type === 'feriado') { statusDisplay = "Feriado"; }
+        if (type === 'sem_servico') { statusDisplay = "Sem serviço"; }
+        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: statusDisplay, status: type });
+        editModal.classList.remove("active"); popModalLayer(); currentEdit = null; absenceMenu.classList.remove('active'); isMenuOpen = false;
     }
 
     function removeStatus() {
         if (!currentEdit) return;
         updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: 0, descricao: "", status: null });
-        editModal.classList.remove("active"); 
-        popModalLayer(); 
-        currentEdit = null; 
-        absenceMenu.classList.remove('active'); 
-        isMenuOpen = false;
+        editModal.classList.remove("active"); popModalLayer(); currentEdit = null; absenceMenu.classList.remove('active'); isMenuOpen = false;
     }
 
-    function shareDescription() {
+    function shareDescriptionViaWhatsApp() {
         if (!currentEdit) return;
         const descText = editDesc.value.trim();
-        if (!descText) { showToast("Nenhuma descrição para compartilhar"); return; }
+        if (!descText) { showToast("Nenhuma descrição para compartilhar"); absenceMenu.classList.remove('active'); isMenuOpen = false; return; }
         const message = `${currentEdit.label} - ${currentEdit.day}/${currentEdit.month}/${currentEdit.year}\n${descText}`;
-        const encodedMsg = encodeURIComponent(message);
-        window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+        const encoded = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/?text=${encoded}`;
+        window.open(whatsappUrl, '_blank');
         absenceMenu.classList.remove('active');
         isMenuOpen = false;
+        editModal.classList.remove("active");
+        popModalLayer();
+        currentEdit = null;
     }
 
     function saveNormalValue() {
         if (!currentEdit) return;
+        
+        const currentData = getDayValue(currentEdit.year, currentEdit.month, currentEdit.day);
+        
         let val = parseFloat(editValor.value);
         if (isNaN(val)) val = 0;
         if (val < 0) val = 0;
-        const desc = editDesc.value.trim() || "";
-        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { valor: val, descricao: desc, status: null });
+        
+        const newDesc = editDesc.value.trim() || "";
+        
+        let finalStatus = currentData.status;
+        let finalDesc = newDesc;
+        
+        if (val > 0) {
+            finalStatus = null;
+            if (!finalDesc && currentData.descricao && !currentData.status) {
+                finalDesc = currentData.descricao;
+            }
+        } else if (val === 0 && currentData.status) {
+            finalStatus = currentData.status;
+            finalDesc = newDesc || currentData.descricao;
+        }
+        
+        updateDayData(currentEdit.year, currentEdit.month, currentEdit.day, { 
+            valor: val, 
+            descricao: finalDesc, 
+            status: finalStatus 
+        });
+        
         editModal.classList.remove("active"); 
         popModalLayer(); 
         currentEdit = null;
@@ -1129,143 +1320,128 @@
     }
 
     function getStatusBadge(status) {
-        if (status === 'falta') return `<span class="absence-badge-3d falta-badge"><i class="fas fa-times-circle"></i> Falta</span>`;
-        if (status === 'falta_justificada') return `<span class="absence-badge-3d falta-badge"><i class="fas fa-file-alt"></i> Falta Justificada</span>`;
-        if (status === 'doente') return `<span class="absence-badge-3d doente-badge"><i class="fas fa-thermometer-half"></i> Doente</span>`;
-        if (status === 'feriado') return `<span class="absence-badge-3d feriado-badge"><i class="fas fa-calendar-day"></i> Feriado</span>`;
-        if (status === 'sem_servico') return `<span class="absence-badge-3d sem-servico-badge"><i class="fas fa-briefcase-slash"></i> Sem serviço</span>`;
+        if (status === 'falta') return `<span class="absence-badge-3d falta-badge">❌ Falta</span>`;
+        if (status === 'falta_justificada') return `<span class="absence-badge-3d falta-badge">📄 Falta Justificada</span>`;
+        if (status === 'doente') return `<span class="absence-badge-3d doente-badge">🌡️ Doente</span>`;
+        if (status === 'feriado') return `<span class="absence-badge-3d feriado-badge">📅 Feriado</span>`;
+        if (status === 'sem_servico') return `<span class="absence-badge-3d sem-servico-badge">💼 Não Houve serviço</span>`;
         return '';
     }
 
     function renderWeeklyView(week, weekIdx) {
-        const start = week[0].date;
-        const end = week[5].date;
+        const start = week[0].date; const end = week[5].date;
         const monthNameLong = start.toLocaleString('pt-BR', { month: 'long' });
         const monthNameCapitalized = monthNameLong.charAt(0).toUpperCase() + monthNameLong.slice(1);
         const year = start.getFullYear();
         let weekTotal = computeWeekTotal(week);
-        
-        let html = `<div class="weekly-header">
-                        <div class="back-button" id="backToMonthlyBtn"><i class="fas fa-arrow-left"></i></div>
-                        <div class="weekly-header-title">
-                            <h2>Semana ${weekIdx + 1}</h2>
-                            <p>${start.getDate()} a ${end.getDate()} de ${monthNameCapitalized} • ${year}</p>
-                        </div>
-                    </div>
-                    <div class="week-total-container">
-                        <div class="week-total-label">SALDO TOTAL DA SEMANA</div>
-                        <div class="week-total-amount">R$ ${weekTotal.toFixed(2)}</div>
-                    </div>`;
-        
+        let html = `<div class="weekly-header"><div class="back-button" id="backToMonthlyBtn"></div><div class="weekly-header-title"><h2>Semana ${weekIdx + 1}</h2><p>${start.getDate()} a ${end.getDate()} de ${monthNameCapitalized} • ${year}</p></div></div><div class="week-total-container"><div class="week-total-label">SALDO TOTAL DA SEMANA</div><div class="week-total-amount">R$ ${weekTotal.toFixed(2)}</div></div>`;
         for (let day of week) {
             if (day.dayOfWeek === 0) continue;
             const val = getDayValue(day.year, day.month, day.day);
-            let valueClass = "day-value-zero-3d";
-            let displayValue = `R$ ${val.valor.toFixed(2)}`;
+            let valueBadgeClass = "day-value-zero-badge";
+            let displayValue = "";
             let badgeHtml = "";
             let cardClass = getDayCardClass(val);
             
             if (val.status) {
-                displayValue = "R$ 0,00";
                 badgeHtml = getStatusBadge(val.status);
-            } else if (val.valor > 0) {
-                valueClass = "day-value-positive-3d";
+                displayValue = "";
+            } else {
+                displayValue = `R$ ${val.valor.toFixed(2)}`;
+                if (val.valor > 0) {
+                    valueBadgeClass = "day-value-positive-badge";
+                }
             }
             
             html += `<div class="day-card-3d ${cardClass}" data-day="${day.day}" data-month="${day.month}" data-year="${day.year}" data-dow="${day.dayOfWeek}">
-                        <div><span class="day-name-3d">${WEEK_DAYS_MAP[day.dayOfWeek].toUpperCase()}</span><br><span class="day-date-3d">${day.day}/${day.month}</span></div>
-                        <div class="day-right-side-3d">${badgeHtml}<span class="day-value-3d ${valueClass}">${displayValue}</span></div>
+                        <div>
+                            <span class="day-name-3d">${WEEK_DAYS_MAP[day.dayOfWeek].toUpperCase()}</span><br>
+                            <span class="day-date-3d">${day.day}/${day.month}</span>
+                        </div>
+                        <div class="day-right-side-3d">
+                            ${badgeHtml}
+                            ${displayValue ? `<span class="day-value-badge ${valueBadgeClass}">${displayValue}</span>` : ''}
+                        </div>
                     </div>`;
         }
-        
         weeklyContent.innerHTML = html;
-        
         document.getElementById("backToMonthlyBtn").onclick = () => backToMonthlyView();
-        
-        document.querySelectorAll("#weeklyContent .day-card-3d").forEach(card => {
-            const year = parseInt(card.dataset.year);
-            const month = parseInt(card.dataset.month);
-            const day = parseInt(card.dataset.day);
-            const dow = parseInt(card.dataset.dow);
-            const val = getDayValue(year, month, day);
-            card.onclick = () => openEditModal(year, month, day, WEEK_DAYS_MAP[dow], val);
-        });
+        document.querySelectorAll("#weeklyContent .day-card-3d").forEach(card => { const year = parseInt(card.dataset.year), month = parseInt(card.dataset.month), day = parseInt(card.dataset.day), dow = parseInt(card.dataset.dow); const val = getDayValue(year, month, day); card.onclick = () => openEditModal(year, month, day, WEEK_DAYS_MAP[dow], val); });
     }
 
-    function backToMonthlyView() {
-        currentWeeklyData = null;
-        monthlyView.classList.remove("hidden");
-        weeklyView.classList.add("hidden");
-        mainHeader.classList.remove("hidden");
-        toggleTopHeader(true);
-        resetSettingsButton();
-        renderUI();
-        if (window.history.state && window.history.state.weekly) {
-            history.replaceState({}, '');
-        }
-    }
-
-    function openWeeklyView(week, weekIdx) {
-        currentWeeklyData = { week, weekIdx };
-        renderWeeklyView(week, weekIdx);
-        monthlyView.classList.add("hidden");
-        weeklyView.classList.remove("hidden");
-        mainHeader.classList.add("hidden");
-        toggleTopHeader(false);
-        history.pushState({ weekly: true }, '');
-    }
+    function backToMonthlyView() { currentWeeklyData = null; monthlyView.classList.remove("hidden"); weeklyView.classList.add("hidden"); mainHeader.classList.remove("hidden"); toggleTopHeader(true); renderUI(); if (window.history.state && window.history.state.weekly) history.replaceState({}, ''); }
+    function openWeeklyView(week, weekIdx) { currentWeeklyData = { week, weekIdx }; renderWeeklyView(week, weekIdx); monthlyView.classList.add("hidden"); weeklyView.classList.remove("hidden"); mainHeader.classList.add("hidden"); toggleTopHeader(false); history.pushState({ weekly: true }, ''); }
 
     function renderWeeks(weeks) {
         weeksContainer.innerHTML = "";
-        if (!weeks || weeks.length === 0) { 
-            weeksContainer.innerHTML = '<div style="text-align:center;padding:2rem;">Nenhuma semana</div>'; 
-            return; 
-        }
-        weeks.forEach((week, idx) => {
-            const weekTotal = computeWeekTotal(week);
-            const start = week[0].date, end = week[5].date;
-            const range = `${start.getDate()}/${start.getMonth()+1} - ${end.getDate()}/${end.getMonth()+1}`;
+        if (!weeks || weeks.length === 0) { weeksContainer.innerHTML = '<div style="text-align:center;padding:2rem;">Nenhuma semana encontrada para este mês</div>'; return; }
+        weeks.forEach((week, idx) => { 
+            const weekTotal = computeWeekTotal(week); 
+            const start = week[0].date, end = week[5].date; 
+            const range = `${start.getDate()}/${start.getMonth()+1} - ${end.getDate()}/${end.getMonth()+1}`; 
             const accordion = document.createElement("div"); 
-            accordion.className = "week-accordion";
+            accordion.className = "week-accordion"; 
             const header = document.createElement("div"); 
-            header.className = `week-header-accordion ${getWeekHeaderClass(week)}`;
-            header.innerHTML = `<div><div class="week-title-line"><span class="week-text">Semana</span><span class="week-num">${idx+1}</span></div><div class="week-range-compact">${range}</div></div><div class="week-total-badge ${weekTotal>0?'week-total-positive':'week-total-zero'}">R$ ${weekTotal.toFixed(2)}</div>`;
-            header.onclick = () => openWeeklyView(week, idx);
-            accordion.appendChild(header);
-            weeksContainer.appendChild(accordion);
+            header.className = `week-header-accordion ${getWeekHeaderClass(week)}`; 
+            header.innerHTML = `<div><div class="week-title-line"><span class="week-text">Semana</span><span class="week-num">${idx+1}</span></div><div class="week-range-compact">${range}</div></div><div class="week-total-badge ${weekTotal>0?'week-total-positive':'week-total-zero'}">R$ ${weekTotal.toFixed(2)}</div>`; 
+            header.onclick = () => openWeeklyView(week, idx); 
+            accordion.appendChild(header); 
+            weeksContainer.appendChild(accordion); 
         });
     }
 
     async function renderUI() {
-        const [year, month] = currentYearMonth.split("-").map(Number);
-        const dateObj = new Date(year, month-1, 1);
-        let monthName = dateObj.toLocaleString('pt-BR', { month: 'long' });
-        monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-        monthNameSpan.innerText = monthName.toUpperCase();
-        yearSpan.innerText = year;
+        if (isRendering) return;
+        isRendering = true;
         
-        let finalWeeks = [], total = 0;
-        const check = getWeeksForMonth(year, month, null);
-        if (check.needsDecision && check.weekData) {
-            const keep = await askUserDecision(year, month, check.weekData);
-            transferDecisions[`${year}-${month}`] = keep;
-            saveToLocalStorage();
-            const { weeks } = getWeeksForMonth(year, month, keep);
-            finalWeeks = weeks; total = computeGlobalMonthTotal(weeks);
-        } else {
-            const { weeks } = getWeeksForMonth(year, month, null);
-            finalWeeks = weeks; total = computeGlobalMonthTotal(weeks);
+        try {
+            const [year, month] = currentYearMonth.split("-").map(Number);
+            const dateObj = new Date(year, month-1, 1);
+            let monthName = dateObj.toLocaleString('pt-BR', { month: 'long' });
+            monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+            monthNameSpan.innerText = monthName.toUpperCase();
+            yearSpan.innerText = year;
+            
+            let finalWeeks = [];
+            let total = 0;
+            
+            const check = getWeeksForMonth(year, month, null);
+            
+            if (check.needsDecision && check.weekData) {
+                const existingOverlay = document.querySelector('.decision-overlay');
+                if (existingOverlay) existingOverlay.remove();
+                
+                const decision = await askUserDecision(year, month, check.weekData, check.decisionKey);
+                
+                if (decision === null) {
+                    const { weeks } = getWeeksForMonth(year, month, false);
+                    finalWeeks = weeks;
+                    total = computeGlobalMonthTotal(weeks);
+                } else {
+                    transferDecisions[check.decisionKey] = decision;
+                    saveToLocalStorage();
+                    const { weeks } = getWeeksForMonth(year, month, decision);
+                    finalWeeks = weeks;
+                    total = computeGlobalMonthTotal(weeks);
+                }
+            } else {
+                const { weeks } = getWeeksForMonth(year, month, null);
+                finalWeeks = weeks;
+                total = computeGlobalMonthTotal(weeks);
+            }
+            
+            monthTotalSpan.innerText = `R$ ${total.toFixed(2)}`;
+            if (total > 0) { 
+                monthTotalSpan.classList.remove("balance-zero"); 
+                monthTotalSpan.classList.add("balance-positive"); 
+            } else { 
+                monthTotalSpan.classList.remove("balance-positive"); 
+                monthTotalSpan.classList.add("balance-zero"); 
+            }
+            renderWeeks(finalWeeks);
+        } finally {
+            isRendering = false;
         }
-        
-        monthTotalSpan.innerText = `R$ ${total.toFixed(2)}`;
-        if (total > 0) {
-            monthTotalSpan.classList.remove("balance-zero");
-            monthTotalSpan.classList.add("balance-positive");
-        } else {
-            monthTotalSpan.classList.remove("balance-positive");
-            monthTotalSpan.classList.add("balance-zero");
-        }
-        renderWeeks(finalWeeks);
     }
 
     function showFullCalendar() {
@@ -1273,110 +1449,63 @@
         const daysInMonth = new Date(year, month, 0).getDate();
         const firstDayOfMonth = new Date(year, month-1, 1);
         let startOffset = firstDayOfMonth.getDay();
-        
-        let html = `<div class="calendar-modal"><h3 style="text-align:center;color:#facc15;">${monthNameSpan.innerText} ${year}</h3><div class="calendar-grid">`;
+        let html = `<div class="calendar-modal"><h3 style="text-align:center;color:#facc15;">📅 ${monthNameSpan.innerText} ${year}</h3><div class="calendar-grid">`;
         ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"].forEach(w => html += `<div class="cal-weekday">${w}</div>`);
         for(let i=0; i<startOffset; i++) html += `<div class="cal-day"></div>`;
-        for(let d=1; d<=daysInMonth; d++) {
-            const val = getDayValue(year, month, d);
-            let cls = val.valor > 0 ? "has-value" : "";
-            html += `<div class="cal-day ${cls}" data-day="${d}">${d}</div>`;
-        }
-        html += `</div><button class="close-modal-btn" id="closeCal">Fechar</button></div>`;
-        
-        const overlay = document.createElement("div");
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;z-index:3000;";
-        overlay.innerHTML = html;
-        document.body.appendChild(overlay);
-        const close = () => overlay.remove();
-        pushModalLayer(close);
-        overlay.querySelector("#closeCal").onclick = close;
-        overlay.onclick = (e) => { if(e.target === overlay) close(); };
-        
-        overlay.querySelectorAll(".cal-day").forEach(el => {
-            if(!el.hasAttribute("data-day")) return;
-            const day = parseInt(el.dataset.day);
-            el.onclick = () => {
-                const date = new Date(year, month-1, day);
-                const dow = date.getDay();
-                if(dow >= 1 && dow <= 6) {
-                    const dayNames = {1:"Segunda-feira",2:"Terça-feira",3:"Quarta-feira",4:"Quinta-feira",5:"Sexta-feira",6:"Sábado"};
-                    close();
-                    openEditModal(year, month, day, dayNames[dow], getDayValue(year, month, day));
-                }
-            };
-        });
+        for(let d=1; d<=daysInMonth; d++) { const val = getDayValue(year, month, d); let cls = val.valor > 0 ? "has-value" : ""; html += `<div class="cal-day ${cls}" data-day="${d}">${d}</div>`; }
+        html += `</div><button class="close-modal-btn" id="closeCal">✕ Fechar</button></div>`;
+        const overlay = document.createElement("div"); overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;z-index:3000;"; overlay.innerHTML = html; document.body.appendChild(overlay);
+        const close = () => overlay.remove(); pushModalLayer(close); overlay.querySelector("#closeCal").onclick = close; overlay.onclick = (e) => { if(e.target === overlay) close(); };
+        overlay.querySelectorAll(".cal-day").forEach(el => { if(!el.hasAttribute("data-day")) return; const day = parseInt(el.dataset.day); el.onclick = () => { const date = new Date(year, month-1, day); const dow = date.getDay(); if(dow >= 1 && dow <= 6) { const dayNames = {1:"Segunda-feira",2:"Terça-feira",3:"Quarta-feira",4:"Quinta-feira",5:"Sexta-feira",6:"Sábado"}; close(); openEditModal(year, month, day, dayNames[dow], getDayValue(year, month, day)); } }; });
     }
 
-    function changeMonth(delta) {
-        if (currentWeeklyData) return;
-        let [y,m] = currentYearMonth.split("-").map(Number);
-        let nm = m + delta, ny = y;
-        if(nm<1){ nm=12; ny--; }
-        if(nm>12){ nm=1; ny++; }
-        currentYearMonth = `${ny}-${String(nm).padStart(2,'0')}`;
-        saveToLocalStorage();
-        renderUI();
+    function changeMonth(delta) { 
+        if (currentWeeklyData) return; 
+        let [y,m] = currentYearMonth.split("-").map(Number); 
+        let nm = m + delta, ny = y; 
+        if(nm<1){ nm=12; ny--; } 
+        if(nm>12){ nm=1; ny++; } 
+        currentYearMonth = `${ny}-${String(nm).padStart(2,'0')}`; 
+        saveToLocalStorage(); 
+        renderUI(); 
     }
 
-    // Event listeners
     prevBtn.onclick = () => changeMonth(-1);
     nextBtn.onclick = () => changeMonth(1);
     monthYearClickable.onclick = showFullCalendar;
     settingsBtn.onclick = openSettingsModal;
-    
     confirmBtn.onclick = saveNormalValue;
     cancelBtn.onclick = () => { if(editModal.classList.contains("active")){ editModal.classList.remove("active"); popModalLayer(); currentEdit = null; absenceMenu.classList.remove('active'); isMenuOpen = false; } };
+    dotsMenuBtn.onclick = (e) => { e.stopPropagation(); if (isMenuOpen) { absenceMenu.classList.remove('active'); isMenuOpen = false; } else { absenceMenu.classList.add('active'); isMenuOpen = true; } };
+    document.addEventListener('click', function(event) { if (isMenuOpen && !dotsMenuBtn.contains(event.target) && !absenceMenu.contains(event.target)) { absenceMenu.classList.remove('active'); isMenuOpen = false; } });
     
-    dotsMenuBtn.onclick = (e) => {
-        e.stopPropagation();
-        if (isMenuOpen) {
-            absenceMenu.classList.remove('active');
-            isMenuOpen = false;
-        } else {
-            absenceMenu.classList.add('active');
-            isMenuOpen = true;
+    function bindMenuItems() {
+        document.querySelectorAll('.menu-item').forEach(item => { item.removeEventListener('click', item._handler);
+            const handler = (e) => { e.stopPropagation(); const type = item.dataset.type;
+                if (type === 'falta') applyStatus('falta');
+                else if (type === 'falta_justificada') applyStatus('falta_justificada');
+                else if (type === 'doente') applyStatus('doente');
+                else if (type === 'feriado') applyStatus('feriado');
+                else if (type === 'sem_servico') applyStatus('sem_servico');
+                else if (type === 'compartilhar') shareDescriptionViaWhatsApp();
+                else if (type === 'remover') removeStatus();
+            }; item._handler = handler; item.addEventListener('click', handler);
+        });
+    }
+    bindMenuItems();
+    
+    window.addEventListener('popstate', () => { 
+        if (modalStack.length) {
+            popModalLayer();
+        } else if (currentWeeklyData !== null) {
+            backToMonthlyView();
         }
-    };
-    
-    document.addEventListener('click', function(event) {
-        if (isMenuOpen && !dotsMenuBtn.contains(event.target) && !absenceMenu.contains(event.target)) {
-            absenceMenu.classList.remove('active');
-            isMenuOpen = false;
-        }
-    });
-    
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.onclick = (e) => {
-            e.stopPropagation();
-            const type = item.dataset.type;
-            if (type === 'falta') applyStatus('falta');
-            else if (type === 'falta_justificada') applyStatus('falta_justificada');
-            else if (type === 'doente') applyStatus('doente');
-            else if (type === 'feriado') applyStatus('feriado');
-            else if (type === 'sem_servico') applyStatus('sem_servico');
-            else if (type === 'compartilhar') shareDescription();
-            else if (type === 'remover') removeStatus();
-        };
-    });
-    
-    window.addEventListener('popstate', () => {
-        if (isHandlingPopState) return;
-        isHandlingPopState = true;
-        if (modalStack.length) popModalLayer();
-        else if (currentWeeklyData !== null) backToMonthlyView();
-        isHandlingPopState = false;
     });
     
     history.replaceState({}, '');
-    
-    // Inicialização
-    loadFromLocalStorage();
-    renderUI();
+    loadFromLocalStorage(); 
+    renderUI(); 
     toggleTopHeader(true);
-    resetSettingsButton();
 </script>
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </body>
 </html>
